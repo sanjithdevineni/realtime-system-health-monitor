@@ -85,7 +85,8 @@ At a high level, the system consists of:
 ### Setup
 
 ```bash
-git clone https://github.com/<your-username>/realtime-system-health-monitor.git
+# Clone the repository
+git clone https://github.com/sanjithdevineni/realtime-system-health-monitor.git
 cd realtime-system-health-monitor
 ```
 
