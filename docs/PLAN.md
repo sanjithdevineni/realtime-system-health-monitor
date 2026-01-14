@@ -2,7 +2,7 @@
 
 ## 1. High-Level Idea
 
-Build a small distributed system with multiple simulated services that emit health metrics (CPU, memory, latency, error rate, heartbeat). A central monitoring service collects these metrics and exposes them to a real-time dashboard, which displays current system health and raises alerts when services become degraded or unresponsive.
+Build a small distributed system with multiple simulated services that emit health metrics (CPU, memory, latency, error rate, heartbeat). A central FastAPI backend collects these metrics and exposes them to a real-time React dashboard via HTTP and WebSocket endpoints, which displays current system health and raises alerts when services become degraded or unresponsive.
 
 The goal is to demonstrate end-to-end system design, reliability, and observability in a realistic but lightweight setting.
 
@@ -13,22 +13,20 @@ The goal is to demonstrate end-to-end system design, reliability, and observabil
 - Show **end-to-end ownership**: design, implementation, monitoring, and demo.
 - Demonstrate **system design thinking** (services, communication, data flow).
 - Practice **reliability and observability** concepts: metrics, health checks, alerts.
-- Keep the scope **small enough** to implement and polish quickly for an interview.
+- Keep the scope **small enough** to implement, polish, and present clearly.
+- Keep the implementation **understandable and presentation-ready**.
+- Maintain **clean, professional documentation**.
 - Have a clear narrative for a **5–7 slide, ~10 minute presentation**.
 
 ---
 
-## 3. Tech Stack (Planned)
+## 3. Tech Stack
 
-- **Language:** Python
-- **Backend Framework:** FastAPI
-- **Real-Time Updates:** WebSockets (FastAPI WebSocket endpoints)
-- **Dashboard:** Streamlit (simple + fast) or React (more control)  
-  > Final choice: _TBD – choose based on time and polish needs._
+- **Backend:** Python, FastAPI, Pydantic, Uvicorn
+- **Frontend:** React + Vite
+- **Real-Time Updates:** WebSockets (FastAPI WebSocket endpoint + browser WebSocket client)
 - **Data Store:** In-memory (Python dicts / simple classes for metrics)
-- **Environment:**  
-  - `uvicorn` for serving FastAPI  
-  - `pip` / `venv` for dependency management
+- **Environment:** `pip` / `venv` for dependency management
 
 ---
 
@@ -69,11 +67,11 @@ The goal is to demonstrate end-to-end system design, reliability, and observabil
    - Global view:
      - List of active alerts
      - Simple charts (e.g., latency or CPU over time) if time allows.
-   - Consumes real-time updates via WebSocket.
+   - Consumes real-time updates via WebSocket using a React (Vite) client.
 
 ---
 
-## 5. Architecture (Draft)
+## 5. Architecture (Current)
 
 **Data Flow:**
 
@@ -88,7 +86,7 @@ The goal is to demonstrate end-to-end system design, reliability, and observabil
 ## 6. Milestones
 
 1. **Design & Setup**
-   - Finalize tech choices (Streamlit vs React).
+   - Confirm FastAPI + React + Vite stack and repo structure.
    - Set up repo structure and virtual environment.
    - Define data models (metric payload, service status, alert types).
 
@@ -109,7 +107,7 @@ The goal is to demonstrate end-to-end system design, reliability, and observabil
    - Include alerts in WebSocket payload.
 
 5. **Dashboard**
-   - Implement basic UI:
+   - Implement basic React UI:
      - Service list + status.
      - Active alerts section.
    - Hook up to WebSocket for real-time updates.
@@ -138,7 +136,7 @@ The goal is to demonstrate end-to-end system design, reliability, and observabil
 
 _Use this section to track progress and key decisions._
 
-- [ ] Tech stack finalized (Streamlit vs React).
+- [ ] Tech stack finalized (FastAPI + React + Vite).
 - [ ] Repo created and initial skeleton pushed.
 - [ ] Service simulators implemented.
 - [ ] Monitoring/collector implemented.
