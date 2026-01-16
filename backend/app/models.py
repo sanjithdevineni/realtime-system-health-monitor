@@ -1,4 +1,4 @@
-from typing import Literal
+from typing import Literal, List
 from pydantic import BaseModel
 
 
@@ -21,3 +21,16 @@ class Alert(BaseModel):
     type: str       # e.g. "HIGH_CPU", "SERVICE_DOWN"
     message: str
     severity: Literal["INFO", "WARNING", "CRITICAL"]
+
+class ServiceHealth(BaseModel):
+    service_name: str
+    cpu: float
+    memory: float
+    latency_ms: float
+    error_rate: float
+    last_heartbeat: float
+    status: ServiceStatusValue
+
+class SystemSnapshot(BaseModel):
+    services: List[ServiceHealth]
+    alerts: List[Alert]
