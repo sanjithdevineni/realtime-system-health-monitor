@@ -1,15 +1,26 @@
-from typing import List
+from typing import List, Literal
+from pydantic import BaseModel
 import asyncio
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.models import ServiceMetric, ServiceHealth, SystemSnapshot
-from app.state import init_metrics, get_all_metrics
+from app.state import init_metrics, get_all_metrics, touch_heartbeat
 from app.simulators import simulate_services
 from app.alerts import classify_service, evaluate_alerts
+from app.faults import set_fault, clear_fault
 
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 def build_snapshot() -> SystemSnapshot:
     """
@@ -91,3 +102,15 @@ async def websocket_snapshot(websocket: WebSocket):
     except WebSocketDisconnect:
         # Client disconnected; nothing to do
         print("WebSocket client disconnected")
+
+class FaultRequest(BaseModel):
+    mode: Literal["NONE", "HIGH_CPU", "HIGH_ERROR_RATE", "DOWN"]
+
+@app.post("/faults/{service_name}")
+def set_service_fault(service_name: str, req: FaultRequest):
+    if req.mode == "NONE":
+        clear_fault(service_name)
+        touch_heartbeat(service_name) # this is to 'kick' the service back up
+    else:
+        set_fault(service_name, req.mode)
+    return {"service_name": service_name, "mode": req.mode}
