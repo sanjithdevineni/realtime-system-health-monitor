@@ -13,7 +13,7 @@ This project is meant to demonstrate end-to-end system design, observability, an
 - FastAPI monitoring service that aggregates metrics, computes per-service health, and evaluates alert rules.
 - WebSocket streaming of aggregated metrics and active alerts.
 - React dashboard with real-time service status and alert highlights.
-- Clean, modular implementation suitable for interview walkthroughs.
+- Clean, modular implementation suitable for walkthroughs.
 
 ---
 
