@@ -5,7 +5,7 @@
 # - update metrics
 # - read all metrics
 
-from typing import Dict, List
+from typing import Dict, List, Optional
 import time
 from app.models import ServiceMetric
 
@@ -18,6 +18,18 @@ SERVICE_NAMES = [
 
 # In-memory store: service_name -> latest metrics
 _metrics_by_service: Dict[str, ServiceMetric] = {}
+
+def touch_heartbeat(service_name: str) -> bool:
+    """
+    Force-update last_heartbeat to 'now' for a service if it exists.
+    Returns True if the service existed and and was updated.
+    """
+    metric = _metrics_by_service.get(service_name)
+    if metric is None:
+        return False
+    metric.last_heartbeat = time.time()
+    _metrics_by_service[service_name] = metric
+    return True
 
 def init_metrics() -> None:
     """
